@@ -2,9 +2,10 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<title>Balap Mobil Adu Cepat</title>
+<title>Game Balap Mobil</title>
 
 <style>
 
@@ -22,7 +23,7 @@ background:#111;
 touch-action:none;
 }
 
-/* AREA GAME */
+/* GAME */
 #game{
 position:relative;
 width:100vw;
@@ -38,10 +39,10 @@ left:50%;
 transform:translateX(-50%);
 width:90%;
 height:100%;
-background:#2f2f2f;
-overflow:hidden;
+background:#2e2e2e;
 border-left:8px solid white;
 border-right:8px solid white;
+overflow:hidden;
 }
 
 /* GARIS */
@@ -65,11 +66,12 @@ border-radius:15px;
 
 /* PLAYER */
 #player{
-background:linear-gradient(#ff0000,#a00000);
-bottom:20px;
+background:linear-gradient(#ff0000,#990000);
+bottom:30px;
 left:50%;
 transform:translateX(-50%);
-box-shadow:0 0 20px rgba(255,0,0,0.8);
+box-shadow:
+0 0 20px rgba(255,0,0,0.8);
 }
 
 /* LAWAN */
@@ -112,25 +114,7 @@ font-weight:bold;
 line-height:1.6;
 }
 
-/* FINISH */
-#finish{
-position:absolute;
-top:-200px;
-left:0;
-width:100%;
-height:120px;
-background:
-repeating-linear-gradient(
-90deg,
-white 0px,
-white 40px,
-black 40px,
-black 80px
-);
-z-index:5;
-}
-
-/* HASIL */
+/* RESULT */
 #result{
 position:absolute;
 top:50%;
@@ -139,8 +123,8 @@ transform:translate(-50%,-50%);
 background:rgba(0,0,0,0.9);
 padding:35px;
 border-radius:20px;
-color:white;
 text-align:center;
+color:white;
 display:none;
 z-index:50;
 width:90%;
@@ -156,7 +140,6 @@ color:#ffd600;
 #resultText{
 font-size:28px;
 margin-bottom:20px;
-line-height:1.5;
 }
 
 #restartBtn{
@@ -176,20 +159,23 @@ position:absolute;
 bottom:20px;
 width:100%;
 display:flex;
-justify-content:space-between;
-padding:0 25px;
+justify-content:center;
+align-items:center;
+gap:15px;
 z-index:30;
+flex-wrap:wrap;
 }
 
+/* TOMBOL */
 .controlBtn{
-width:100px;
-height:100px;
-border-radius:50%;
-background:rgba(255,255,255,0.25);
+width:90px;
+height:90px;
+border-radius:20px;
+background:rgba(255,255,255,0.2);
 display:flex;
 justify-content:center;
 align-items:center;
-font-size:45px;
+font-size:42px;
 color:white;
 backdrop-filter:blur(5px);
 user-select:none;
@@ -198,6 +184,12 @@ user-select:none;
 .controlBtn:active{
 transform:scale(0.95);
 background:rgba(255,255,255,0.45);
+}
+
+/* LAYOUT */
+#middleControls{
+display:flex;
+gap:15px;
 }
 
 /* HP */
@@ -209,9 +201,9 @@ height:100px;
 }
 
 .controlBtn{
-width:85px;
-height:85px;
-font-size:38px;
+width:75px;
+height:75px;
+font-size:35px;
 }
 
 #hud{
@@ -229,44 +221,33 @@ font-size:22px;
 
 }
 
-/* TV */
-@media(min-width:1200px){
-
-.car{
-width:90px;
-height:150px;
-}
-
-.controlBtn{
-width:150px;
-height:150px;
-font-size:60px;
-}
-
-}
-
 </style>
 </head>
 <body>
 
 <div id="game">
 
-<div id="road">
-
-<div id="finish"></div>
-
-</div>
+<div id="road"></div>
 
 <!-- HUD -->
 <div id="hud">
-<div>🏁 Posisi: <span id="position">4</span>/4</div>
-<div>🚀 Kecepatan: <span id="speed">0</span></div>
+
+<div>
+🏁 Posisi:
+<span id="position">4</span>/4
+</div>
+
+<div>
+🚀 Kecepatan:
+<span id="speed">0</span>
+</div>
+
 </div>
 
 <!-- PLAYER -->
 <div id="player" class="car"></div>
 
-<!-- LAWAN -->
+<!-- MUSUH -->
 <div id="enemy1" class="car enemy1"></div>
 <div id="enemy2" class="car enemy2"></div>
 <div id="enemy3" class="car enemy3"></div>
@@ -287,12 +268,24 @@ MAIN LAGI
 <!-- KONTROL -->
 <div id="controls">
 
+<div class="controlBtn" id="upBtn">
+⬆
+</div>
+
+<div id="middleControls">
+
 <div class="controlBtn" id="leftBtn">
 ⬅
 </div>
 
 <div class="controlBtn" id="rightBtn">
 ➡
+</div>
+
+</div>
+
+<div class="controlBtn" id="downBtn">
+⬇
 </div>
 
 </div>
@@ -305,19 +298,23 @@ MAIN LAGI
    ELEMENT
 ========================= */
 
-const player = document.getElementById("player");
-const enemy1 = document.getElementById("enemy1");
-const enemy2 = document.getElementById("enemy2");
-const enemy3 = document.getElementById("enemy3");
+const player =
+document.getElementById("player");
+
+const enemy1 =
+document.getElementById("enemy1");
+
+const enemy2 =
+document.getElementById("enemy2");
+
+const enemy3 =
+document.getElementById("enemy3");
 
 const positionText =
 document.getElementById("position");
 
 const speedText =
 document.getElementById("speed");
-
-const finish =
-document.getElementById("finish");
 
 const result =
 document.getElementById("result");
@@ -326,12 +323,18 @@ const resultText =
 document.getElementById("resultText");
 
 /* =========================
-   POSISI AWAL
+   PLAYER
 ========================= */
 
-let playerX = window.innerWidth / 2 - 35;
+let playerX =
+window.innerWidth / 2 - 35;
 
-player.style.left = playerX + "px";
+player.style.left =
+playerX + "px";
+
+/* =========================
+   LAWAN
+========================= */
 
 enemy1.style.left = "20%";
 enemy2.style.left = "45%";
@@ -342,10 +345,8 @@ enemy2.style.top = "350px";
 enemy3.style.top = "500px";
 
 /* =========================
-   DATA BALAP
+   GAME DATA
 ========================= */
-
-let roadY = 0;
 
 let playerDistance = 0;
 
@@ -353,11 +354,13 @@ let enemy1Distance = 0;
 let enemy2Distance = 0;
 let enemy3Distance = 0;
 
-let playerSpeed = 8;
+let speed = 0;
+
+let maxSpeed = 25;
 
 let playing = true;
 
-const FINISH_DISTANCE = 5000;
+const FINISH_DISTANCE = 6000;
 
 /* =========================
    GARIS JALAN
@@ -365,11 +368,13 @@ const FINISH_DISTANCE = 5000;
 
 for(let i=0;i<15;i++){
 
-let line = document.createElement("div");
+let line =
+document.createElement("div");
 
 line.classList.add("line");
 
-line.style.top = (i * 120) + "px";
+line.style.top =
+(i * 120) + "px";
 
 document.getElementById("road")
 .appendChild(line);
@@ -383,9 +388,10 @@ document.querySelectorAll(".line");
 
 lines.forEach(line=>{
 
-let top = parseInt(line.style.top);
+let top =
+parseInt(line.style.top);
 
-top += playerSpeed;
+top += speed;
 
 if(top > window.innerHeight){
 
@@ -393,7 +399,8 @@ top = -120;
 
 }
 
-line.style.top = top + "px";
+line.style.top =
+top + "px";
 
 });
 
@@ -406,31 +413,31 @@ line.style.top = top + "px";
 function moveEnemies(){
 
 enemy1Distance +=
-Math.random() * 10;
+8 + Math.random()*5;
 
 enemy2Distance +=
-Math.random() * 9;
+9 + Math.random()*4;
 
 enemy3Distance +=
-Math.random() * 11;
+7 + Math.random()*6;
 
 }
 
 /* =========================
-   UPDATE PLAYER
+   PLAYER
 ========================= */
 
 function updatePlayer(){
 
-playerDistance += playerSpeed;
+playerDistance += speed;
 
 speedText.innerHTML =
-playerSpeed;
+Math.floor(speed);
 
 }
 
 /* =========================
-   POSISI BALAP
+   POSISI
 ========================= */
 
 function updatePosition(){
@@ -506,17 +513,20 @@ r=>r.name==="Kamu"
 )+1;
 
 resultText.innerHTML = `
-🏆 Posisi Akhir: ${posisi}/4
+🏆 Posisi Akhir:
+${posisi}/4
 `;
 
-navigator.vibrate?.([200,100,200]);
+navigator.vibrate?.(
+[200,100,200]
+);
 
 }
 
 }
 
 /* =========================
-   UPDATE GAME
+   UPDATE
 ========================= */
 
 function update(){
@@ -540,12 +550,12 @@ requestAnimationFrame(update);
 update();
 
 /* =========================
-   GERAK PLAYER
+   GERAK MOBIL
 ========================= */
 
 function moveLeft(){
 
-playerX -= 15;
+playerX -= 12;
 
 if(playerX < 20){
 
@@ -560,7 +570,7 @@ playerX + "px";
 
 function moveRight(){
 
-playerX += 15;
+playerX += 12;
 
 if(
 playerX >
@@ -578,24 +588,70 @@ playerX + "px";
 }
 
 /* =========================
-   KONTROL HP
+   GAS
+========================= */
+
+function accelerate(){
+
+speed += 0.5;
+
+if(speed > maxSpeed){
+
+speed = maxSpeed;
+
+}
+
+}
+
+/* =========================
+   REM
+========================= */
+
+function brake(){
+
+speed -= 0.7;
+
+if(speed < 0){
+
+speed = 0;
+
+}
+
+}
+
+/* =========================
+   TOMBOL HP
 ========================= */
 
 let moveInterval;
 
-function startMove(direction){
+function holdAction(action){
 
 clearInterval(moveInterval);
 
 moveInterval = setInterval(()=>{
 
-if(direction==="left"){
+if(action==="left"){
 
 moveLeft();
 
-}else{
+}
+
+if(action==="right"){
 
 moveRight();
+
+}
+
+if(action==="up"){
+
+accelerate();
+
+}
+
+if(action==="down"){
+
+brake();
 
 }
 
@@ -603,11 +659,13 @@ moveRight();
 
 }
 
-function stopMove(){
+function stopAction(){
 
 clearInterval(moveInterval);
 
 }
+
+/* BUTTONS */
 
 const leftBtn =
 document.getElementById("leftBtn");
@@ -615,20 +673,21 @@ document.getElementById("leftBtn");
 const rightBtn =
 document.getElementById("rightBtn");
 
+const upBtn =
+document.getElementById("upBtn");
+
+const downBtn =
+document.getElementById("downBtn");
+
 leftBtn.addEventListener(
 "touchstart",
 (e)=>{
 
 e.preventDefault();
 
-startMove("left");
+holdAction("left");
 
 }
-);
-
-leftBtn.addEventListener(
-"touchend",
-stopMove
 );
 
 rightBtn.addEventListener(
@@ -637,15 +696,42 @@ rightBtn.addEventListener(
 
 e.preventDefault();
 
-startMove("right");
+holdAction("right");
 
 }
 );
 
-rightBtn.addEventListener(
-"touchend",
-stopMove
+upBtn.addEventListener(
+"touchstart",
+(e)=>{
+
+e.preventDefault();
+
+holdAction("up");
+
+}
 );
+
+downBtn.addEventListener(
+"touchstart",
+(e)=>{
+
+e.preventDefault();
+
+holdAction("down");
+
+}
+);
+
+document.querySelectorAll(".controlBtn")
+.forEach(btn=>{
+
+btn.addEventListener(
+"touchend",
+stopAction
+);
+
+});
 
 /* =========================
    KEYBOARD
@@ -664,6 +750,18 @@ moveLeft();
 if(e.key==="ArrowRight"){
 
 moveRight();
+
+}
+
+if(e.key==="ArrowUp"){
+
+accelerate();
+
+}
+
+if(e.key==="ArrowDown"){
+
+brake();
 
 }
 
