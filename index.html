@@ -23,7 +23,6 @@ background:#111;
 touch-action:none;
 }
 
-/* GAME */
 #game{
 position:relative;
 width:100vw;
@@ -32,14 +31,13 @@ overflow:hidden;
 background:#4caf50;
 }
 
-/* JALAN */
 #road{
 position:absolute;
 left:50%;
 transform:translateX(-50%);
 width:90%;
 height:100%;
-background:#2e2e2e;
+background:#2c2c2c;
 border-left:8px solid white;
 border-right:8px solid white;
 overflow:hidden;
@@ -64,14 +62,24 @@ height:120px;
 border-radius:15px;
 }
 
+.car::before{
+content:"";
+position:absolute;
+width:45px;
+height:28px;
+background:#9be7ff;
+top:12px;
+left:12px;
+border-radius:8px;
+}
+
 /* PLAYER */
 #player{
 background:linear-gradient(#ff0000,#990000);
 bottom:30px;
 left:50%;
 transform:translateX(-50%);
-box-shadow:
-0 0 20px rgba(255,0,0,0.8);
+box-shadow:0 0 20px rgba(255,0,0,0.8);
 }
 
 /* LAWAN */
@@ -85,18 +93,6 @@ background:linear-gradient(#ffd600,#ff6f00);
 
 .enemy3{
 background:linear-gradient(#76ff03,#33691e);
-}
-
-/* KACA */
-.car::before{
-content:"";
-position:absolute;
-width:45px;
-height:28px;
-background:#9be7ff;
-top:12px;
-left:12px;
-border-radius:8px;
 }
 
 /* HUD */
@@ -166,7 +162,6 @@ z-index:30;
 flex-wrap:wrap;
 }
 
-/* TOMBOL */
 .controlBtn{
 width:90px;
 height:90px;
@@ -186,13 +181,11 @@ transform:scale(0.95);
 background:rgba(255,255,255,0.45);
 }
 
-/* LAYOUT */
 #middleControls{
 display:flex;
 gap:15px;
 }
 
-/* HP */
 @media(max-width:768px){
 
 .car{
@@ -209,14 +202,6 @@ font-size:35px;
 #hud{
 font-size:18px;
 padding:12px 15px;
-}
-
-#result h1{
-font-size:32px;
-}
-
-#resultText{
-font-size:22px;
 }
 
 }
@@ -247,12 +232,12 @@ font-size:22px;
 <!-- PLAYER -->
 <div id="player" class="car"></div>
 
-<!-- MUSUH -->
+<!-- LAWAN -->
 <div id="enemy1" class="car enemy1"></div>
 <div id="enemy2" class="car enemy2"></div>
 <div id="enemy3" class="car enemy3"></div>
 
-<!-- HASIL -->
+<!-- RESULT -->
 <div id="result">
 
 <h1>FINISH</h1>
@@ -333,26 +318,20 @@ player.style.left =
 playerX + "px";
 
 /* =========================
-   LAWAN
+   POSISI LAWAN
 ========================= */
 
 enemy1.style.left = "20%";
 enemy2.style.left = "45%";
 enemy3.style.left = "70%";
 
-enemy1.style.top = "200px";
-enemy2.style.top = "350px";
-enemy3.style.top = "500px";
+let enemy1Y = 0;
+let enemy2Y = -200;
+let enemy3Y = -400;
 
 /* =========================
    GAME DATA
 ========================= */
-
-let playerDistance = 0;
-
-let enemy1Distance = 0;
-let enemy2Distance = 0;
-let enemy3Distance = 0;
 
 let speed = 0;
 
@@ -360,7 +339,13 @@ let maxSpeed = 25;
 
 let playing = true;
 
-const FINISH_DISTANCE = 6000;
+let playerDistance = 0;
+
+let enemy1Distance = 0;
+let enemy2Distance = 0;
+let enemy3Distance = 0;
+
+const FINISH_DISTANCE = 7000;
 
 /* =========================
    GARIS JALAN
@@ -412,14 +397,53 @@ top + "px";
 
 function moveEnemies(){
 
-enemy1Distance +=
-8 + Math.random()*5;
+let e1Speed =
+8 + Math.random()*3;
 
-enemy2Distance +=
-9 + Math.random()*4;
+let e2Speed =
+9 + Math.random()*3;
 
-enemy3Distance +=
-7 + Math.random()*6;
+let e3Speed =
+7 + Math.random()*4;
+
+/* Mobil bergerak sendiri */
+
+enemy1Y += e1Speed;
+enemy2Y += e2Speed;
+enemy3Y += e3Speed;
+
+enemy1Distance += e1Speed;
+enemy2Distance += e2Speed;
+enemy3Distance += e3Speed;
+
+/* Loop */
+
+if(enemy1Y > window.innerHeight){
+
+enemy1Y = -200;
+
+}
+
+if(enemy2Y > window.innerHeight){
+
+enemy2Y = -300;
+
+}
+
+if(enemy3Y > window.innerHeight){
+
+enemy3Y = -400;
+
+}
+
+enemy1.style.top =
+enemy1Y + "px";
+
+enemy2.style.top =
+enemy2Y + "px";
+
+enemy3.style.top =
+enemy3Y + "px";
 
 }
 
@@ -526,7 +550,7 @@ navigator.vibrate?.(
 }
 
 /* =========================
-   UPDATE
+   UPDATE GAME
 ========================= */
 
 function update(){
@@ -588,7 +612,7 @@ playerX + "px";
 }
 
 /* =========================
-   GAS
+   GAS & REM
 ========================= */
 
 function accelerate(){
@@ -603,10 +627,6 @@ speed = maxSpeed;
 
 }
 
-/* =========================
-   REM
-========================= */
-
 function brake(){
 
 speed -= 0.7;
@@ -620,7 +640,7 @@ speed = 0;
 }
 
 /* =========================
-   TOMBOL HP
+   KONTROL HP
 ========================= */
 
 let moveInterval;
@@ -664,8 +684,6 @@ function stopAction(){
 clearInterval(moveInterval);
 
 }
-
-/* BUTTONS */
 
 const leftBtn =
 document.getElementById("leftBtn");
