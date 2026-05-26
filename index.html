@@ -2,7 +2,8 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>Game Balap 3 Mobil</title>
 
@@ -22,6 +23,7 @@ font-family:Arial,sans-serif;
 touch-action:none;
 }
 
+/* AREA GAME */
 #game{
 position:relative;
 width:100vw;
@@ -30,7 +32,7 @@ overflow:hidden;
 background:#444;
 }
 
-/* Jalan */
+/* JALAN */
 #road{
 position:absolute;
 width:100%;
@@ -39,7 +41,7 @@ background:#2c2c2c;
 overflow:hidden;
 }
 
-/* Garis jalan */
+/* GARIS JALAN */
 .line{
 position:absolute;
 width:10px;
@@ -47,73 +49,116 @@ height:80px;
 background:white;
 left:50%;
 transform:translateX(-50%);
+opacity:0.8;
 }
 
-/* Mobil Player */
+/* MOBIL PLAYER */
 #player{
 position:absolute;
-width:70px;
-height:120px;
-background:red;
-bottom:20px;
+width:80px;
+height:140px;
+background:linear-gradient(180deg,#ff0000,#b30000);
+bottom:30px;
 left:50%;
 transform:translateX(-50%);
 border-radius:15px;
-box-shadow:0 0 20px rgba(255,0,0,0.8);
+box-shadow:
+0 0 20px rgba(255,0,0,0.8),
+0 0 40px rgba(255,0,0,0.4);
 }
 
-/* Musuh */
+/* KACA MOBIL */
+#player::before{
+content:"";
+position:absolute;
+width:55px;
+height:35px;
+background:#87ceeb;
+top:15px;
+left:12px;
+border-radius:10px;
+}
+
+/* MOBIL MUSUH */
 .enemy{
 position:absolute;
-width:70px;
-height:120px;
-background:yellow;
-top:-150px;
+width:80px;
+height:140px;
+background:linear-gradient(180deg,#ffd600,#ff9800);
 border-radius:15px;
+top:-200px;
+box-shadow:
+0 0 20px rgba(255,193,7,0.7);
+}
+
+.enemy::before{
+content:"";
+position:absolute;
+width:55px;
+height:35px;
+background:#87ceeb;
+top:15px;
+left:12px;
+border-radius:10px;
 }
 
 /* HUD */
 #hud{
 position:absolute;
-top:10px;
-left:10px;
-z-index:10;
+top:15px;
+left:15px;
+z-index:20;
 color:white;
-font-size:24px;
+font-size:22px;
 font-weight:bold;
 background:rgba(0,0,0,0.5);
-padding:10px 15px;
-border-radius:10px;
+padding:15px 20px;
+border-radius:15px;
+backdrop-filter:blur(5px);
+line-height:1.6;
 }
 
+/* GAME OVER */
 #gameOver{
 position:absolute;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
-color:white;
-font-size:40px;
-font-weight:bold;
-display:none;
-text-align:center;
-z-index:20;
-background:rgba(0,0,0,0.8);
-padding:30px;
+background:rgba(0,0,0,0.9);
+padding:40px;
 border-radius:20px;
+text-align:center;
+color:white;
+display:none;
+z-index:50;
+width:90%;
+max-width:400px;
+}
+
+#gameOver h1{
+font-size:45px;
+margin-bottom:15px;
+color:#ffd700;
+}
+
+#finalScore{
+font-size:28px;
+margin-bottom:20px;
+line-height:1.5;
 }
 
 #restartBtn{
-margin-top:20px;
 padding:15px 30px;
-font-size:22px;
+font-size:24px;
 border:none;
-border-radius:10px;
+border-radius:15px;
 background:#00c853;
 color:white;
 cursor:pointer;
+font-weight:bold;
 }
 
-/* Kontrol HP */
+/* KONTROL HP */
 #controls{
 position:absolute;
 bottom:20px;
@@ -121,12 +166,12 @@ width:100%;
 display:flex;
 justify-content:space-between;
 padding:0 30px;
-z-index:10;
+z-index:30;
 }
 
 .controlBtn{
-width:120px;
-height:120px;
+width:110px;
+height:110px;
 border-radius:50%;
 background:rgba(255,255,255,0.2);
 display:flex;
@@ -136,23 +181,56 @@ font-size:50px;
 color:white;
 user-select:none;
 backdrop-filter:blur(5px);
+position:relative;
+bottom:10px;
 }
 
 .controlBtn:active{
 background:rgba(255,255,255,0.4);
+transform:scale(0.95);
 }
 
-@media(min-width:1000px){
+/* HP */
+@media(max-width:768px){
+
+#player,.enemy{
+width:70px;
+height:120px;
+}
+
+#hud{
+font-size:18px;
+padding:12px 15px;
+}
+
+.controlBtn{
+width:90px;
+height:90px;
+font-size:40px;
+}
+
+#gameOver h1{
+font-size:35px;
+}
+
+#finalScore{
+font-size:22px;
+}
+
+}
+
+/* TV */
+@media(min-width:1200px){
+
+#player,.enemy{
+width:100px;
+height:170px;
+}
 
 .controlBtn{
 width:150px;
 height:150px;
 font-size:60px;
-}
-
-#player,.enemy{
-width:90px;
-height:150px;
 }
 
 }
@@ -165,72 +243,120 @@ height:150px;
 
 <div id="road"></div>
 
+<!-- HUD -->
 <div id="hud">
-Score: <span id="score">0</span>
+<div>🏁 Score: <span id="score">0</span></div>
+<div id="levelText">🚀 Level: 1</div>
 </div>
 
+<!-- PLAYER -->
 <div id="player"></div>
 
+<!-- GAME OVER -->
 <div id="gameOver">
-🚗 GAME OVER<br>
+
+<h1>GAME OVER</h1>
+
 <div id="finalScore"></div>
-<button id="restartBtn">Main Lagi</button>
+
+<button id="restartBtn">
+MAIN LAGI
+</button>
+
 </div>
 
+<!-- KONTROL -->
 <div id="controls">
-<div class="controlBtn" id="leftBtn">⬅</div>
-<div class="controlBtn" id="rightBtn">➡</div>
+
+<div class="controlBtn" id="leftBtn">
+⬅
+</div>
+
+<div class="controlBtn" id="rightBtn">
+➡
+</div>
+
 </div>
 
 </div>
 
 <script>
 
+/* =========================
+   ELEMENT
+========================= */
+
 const game = document.getElementById("game");
 const player = document.getElementById("player");
 const scoreText = document.getElementById("score");
+const levelText = document.getElementById("levelText");
 const gameOver = document.getElementById("gameOver");
 const finalScore = document.getElementById("finalScore");
 const restartBtn = document.getElementById("restartBtn");
 
-let playerX = window.innerWidth / 2 - 35;
+/* =========================
+   VARIABLE
+========================= */
+
+let playerX = window.innerWidth / 2 - 40;
+
 let score = 0;
-let speed = 8;
+
+let level = 1;
+
+let speed = 5;
+
 let playing = true;
 
-const enemies = [];
+/* =========================
+   POSISI PLAYER
+========================= */
 
-/* Garis jalan */
+player.style.left = playerX + "px";
+
+/* =========================
+   LEVEL
+========================= */
+
+function updateLevel(){
+
+if(score >= 20){
+
+level = 3;
+speed = 14;
+
+}
+else if(score >= 10){
+
+level = 2;
+speed = 9;
+
+}
+else{
+
+level = 1;
+speed = 5;
+
+}
+
+levelText.innerHTML =
+"🚀 Level: " + level;
+
+}
+
+/* =========================
+   GARIS JALAN
+========================= */
+
 for(let i=0;i<15;i++){
 
 let line = document.createElement("div");
+
 line.classList.add("line");
+
 line.style.top = (i * 100) + "px";
 
 document.getElementById("road").appendChild(line);
-
-}
-
-/* Buat 3 mobil musuh */
-for(let i=0;i<3;i++){
-
-createEnemy(i);
-
-}
-
-function createEnemy(index){
-
-let enemy = document.createElement("div");
-
-enemy.classList.add("enemy");
-
-enemy.style.left = (Math.random() * (window.innerWidth - 80)) + "px";
-
-enemy.style.top = (-300 * index) + "px";
-
-game.appendChild(enemy);
-
-enemies.push(enemy);
 
 }
 
@@ -256,6 +382,35 @@ line.style.top = top + "px";
 
 }
 
+/* =========================
+   MOBIL MUSUH
+========================= */
+
+const enemies = [];
+
+for(let i=0;i<3;i++){
+
+createEnemy(i);
+
+}
+
+function createEnemy(index){
+
+let enemy = document.createElement("div");
+
+enemy.classList.add("enemy");
+
+enemy.style.left =
+(Math.random() * (window.innerWidth - 100)) + "px";
+
+enemy.style.top = (-350 * index) + "px";
+
+game.appendChild(enemy);
+
+enemies.push(enemy);
+
+}
+
 function moveEnemies(){
 
 enemies.forEach(enemy=>{
@@ -266,20 +421,16 @@ top += speed + 3;
 
 if(top > window.innerHeight){
 
-top = -200;
+top = -250;
 
 enemy.style.left =
-(Math.random() * (window.innerWidth - 80)) + "px";
+(Math.random() * (window.innerWidth - 100)) + "px";
 
 score++;
 
 scoreText.textContent = score;
 
-if(score % 10 === 0){
-
-speed++;
-
-}
+updateLevel();
 
 }
 
@@ -291,10 +442,17 @@ checkCollision(enemy);
 
 }
 
+/* =========================
+   TABRAKAN
+========================= */
+
 function checkCollision(enemy){
 
-const playerRect = player.getBoundingClientRect();
-const enemyRect = enemy.getBoundingClientRect();
+const playerRect =
+player.getBoundingClientRect();
+
+const enemyRect =
+enemy.getBoundingClientRect();
 
 if(
 playerRect.left < enemyRect.right &&
@@ -309,17 +467,28 @@ endGame();
 
 }
 
+/* =========================
+   GAME OVER
+========================= */
+
 function endGame(){
 
 playing = false;
 
 gameOver.style.display = "block";
 
-finalScore.innerHTML = "Score Kamu: " + score;
+finalScore.innerHTML = `
+🏁 Score: ${score}<br>
+🚀 Level Tertinggi: ${level}
+`;
 
 navigator.vibrate?.([200,100,200]);
 
 }
+
+/* =========================
+   UPDATE GAME
+========================= */
 
 function update(){
 
@@ -335,13 +504,18 @@ requestAnimationFrame(update);
 
 update();
 
-/* Gerak Mobil */
+/* =========================
+   GERAK PLAYER
+========================= */
+
 function moveLeft(){
 
-playerX -= 40;
+playerX -= 12;
 
 if(playerX < 0){
+
 playerX = 0;
+
 }
 
 player.style.left = playerX + "px";
@@ -350,57 +524,147 @@ player.style.left = playerX + "px";
 
 function moveRight(){
 
-playerX += 40;
+playerX += 12;
 
-if(playerX > window.innerWidth - player.offsetWidth){
-playerX = window.innerWidth - player.offsetWidth;
+if(playerX >
+window.innerWidth - player.offsetWidth){
+
+playerX =
+window.innerWidth - player.offsetWidth;
+
 }
 
 player.style.left = playerX + "px";
 
 }
 
-/* Tombol HP */
-document.getElementById("leftBtn").addEventListener("touchstart",(e)=>{
-e.preventDefault();
+/* =========================
+   KONTROL HP SMOOTH
+========================= */
+
+let moveInterval;
+
+function startMove(direction){
+
+clearInterval(moveInterval);
+
+moveInterval = setInterval(()=>{
+
+if(direction === "left"){
+
 moveLeft();
-});
 
-document.getElementById("rightBtn").addEventListener("touchstart",(e)=>{
-e.preventDefault();
+}else{
+
 moveRight();
-});
 
-/* Keyboard */
-document.addEventListener("keydown",(e)=>{
+}
+
+},16);
+
+}
+
+function stopMove(){
+
+clearInterval(moveInterval);
+
+}
+
+const leftBtn =
+document.getElementById("leftBtn");
+
+const rightBtn =
+document.getElementById("rightBtn");
+
+leftBtn.addEventListener(
+"touchstart",
+(e)=>{
+
+e.preventDefault();
+
+startMove("left");
+
+}
+);
+
+leftBtn.addEventListener(
+"touchend",
+stopMove
+);
+
+rightBtn.addEventListener(
+"touchstart",
+(e)=>{
+
+e.preventDefault();
+
+startMove("right");
+
+}
+);
+
+rightBtn.addEventListener(
+"touchend",
+stopMove
+);
+
+/* =========================
+   KEYBOARD
+========================= */
+
+document.addEventListener(
+"keydown",
+(e)=>{
 
 if(e.key === "ArrowLeft"){
+
 moveLeft();
+
 }
 
 if(e.key === "ArrowRight"){
+
 moveRight();
+
 }
 
-});
+}
+);
 
-/* Restart */
-restartBtn.addEventListener("click",()=>{
+/* =========================
+   RESTART
+========================= */
+
+restartBtn.addEventListener(
+"click",
+()=>{
 
 location.reload();
 
-});
+}
+);
 
-/* Fullscreen otomatis */
-document.body.addEventListener("click",()=>{
+/* =========================
+   FULLSCREEN
+========================= */
 
-const el = document.documentElement;
+document.body.addEventListener(
+"click",
+()=>{
+
+const el =
+document.documentElement;
 
 if(el.requestFullscreen){
-el.requestFullscreen().catch(()=>{});
+
+el.requestFullscreen()
+.catch(()=>{});
+
 }
 
-},{once:true});
+},
+{once:true}
+);
 
 </script>
 
