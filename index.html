@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Game Tangkap Kotak</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:Arial, sans-serif;
+background:linear-gradient(135deg,#0f172a,#1e293b);
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+color:white;
+overflow:hidden;
+}
+
+.game-container{
+width:95%;
+max-width:700px;
+text-align:center;
+}
+
+h1{
+font-size:45px;
+margin-bottom:15px;
+color:#ffd700;
+text-shadow:0 0 15px rgba(255,215,0,0.7);
+}
+
+.info{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+background:rgba(255,255,255,0.1);
+padding:15px 20px;
+border-radius:15px;
+backdrop-filter:blur(10px);
+font-size:22px;
+font-weight:bold;
+}
+
+#startBtn{
+padding:14px 35px;
+font-size:22px;
+font-weight:bold;
+border:none;
+border-radius:15px;
+background:#00c853;
+color:white;
+cursor:pointer;
+transition:0.3s;
+margin-bottom:20px;
+box-shadow:0 0 20px rgba(0,200,83,0.5);
+}
+
+#startBtn:hover{
+transform:scale(1.05);
+background:#00e676;
+}
+
+#gameArea{
+width:100%;
+height:500px;
+background:rgba(255,255,255,0.08);
+border:4px solid rgba(255,255,255,0.2);
+border-radius:25px;
+position:relative;
+overflow:hidden;
+backdrop-filter:blur(5px);
+}
+
+#box{
+width:70px;
+height:70px;
+background:linear-gradient(135deg,#ff1744,#ff5252);
+position:absolute;
+display:none;
+border-radius:18px;
+cursor:pointer;
+box-shadow:
+0 0 20px rgba(255,0,0,0.7),
+0 0 40px rgba(255,0,0,0.4);
+transition:0.1s;
+}
+
+#box:active{
+transform:scale(0.9);
+}
+
+#result{
+margin-top:20px;
+font-size:32px;
+color:#ffd700;
+text-shadow:0 0 10px rgba(255,215,0,0.6);
+}
+
+.instructions{
+margin-top:15px;
+font-size:18px;
+opacity:0.8;
+}
+
+@media(max-width:768px){
+
+h1{
+font-size:32px;
+}
+
+.info{
+font-size:18px;
+padding:12px;
+}
+
+#startBtn{
+font-size:18px;
+padding:12px 25px;
+}
+
+#gameArea{
+height:400px;
+}
+
+#box{
+width:60px;
+height:60px;
+}
+
+#result{
+font-size:24px;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="game-container">
+
+<h1>🎮 Tangkap Kotak</h1>
+
+<div class="info">
+<div>🏆 Score: <span id="score">0</span></div>
+<div>⏰ Waktu: <span id="time">30</span></div>
+</div>
+
+<button id="startBtn">▶ Mulai Game</button>
+
+<div id="gameArea">
+<div id="box"></div>
+</div>
+
+<div class="instructions">
+Klik kotak merah sebanyak mungkin sebelum waktu habis!
+</div>
+
+<h2 id="result"></h2>
+
+</div>
+
+<script>
+
+const box = document.getElementById("box");
+const scoreText = document.getElementById("score");
+const timeText = document.getElementById("time");
+const startBtn = document.getElementById("startBtn");
+const result = document.getElementById("result");
+const gameArea = document.getElementById("gameArea");
+
+let score = 0;
+let time = 30;
+let gameRunning = false;
+let timer;
+
+function moveBox(){
+
+const boxSize = box.offsetWidth;
+
+const maxX = gameArea.clientWidth - boxSize;
+const maxY = gameArea.clientHeight - boxSize;
+
+const randomX = Math.floor(Math.random() * maxX);
+const randomY = Math.floor(Math.random() * maxY);
+
+box.style.left = randomX + "px";
+box.style.top = randomY + "px";
+
+}
+
+box.addEventListener("click", () => {
+
+if(!gameRunning) return;
+
+score++;
+
+scoreText.textContent = score;
+
+moveBox();
+
+createEffect();
+
+});
+
+function createEffect(){
+
+box.animate([
+{ transform: "scale(1)" },
+{ transform: "scale(1.2)" },
+{ transform: "scale(1)" }
+],{
+duration:150
+});
+
+}
+
+startBtn.addEventListener("click", () => {
+
+score = 0;
+time = 30;
+gameRunning = true;
+
+scoreText.textContent = score;
+timeText.textContent = time;
+
+result.textContent = "";
+
+box.style.display = "block";
+
+moveBox();
+
+clearInterval(timer);
+
+timer = setInterval(() => {
+
+time--;
+
+timeText.textContent = time;
+
+if(time <= 0){
+
+clearInterval(timer);
+
+gameRunning = false;
+
+box.style.display = "none";
+
+result.innerHTML = `
+🎉 Game Selesai!<br>
+Score Kamu: ${score}
+`;
+
+}
+
+},1000);
+
+});
+
+</script>
+
+</body>
+</html>
