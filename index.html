@@ -2,10 +2,9 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<title>Game Balap 3 Mobil</title>
+<title>Balap Mobil Adu Cepat</title>
 
 <style>
 
@@ -18,8 +17,8 @@ box-sizing:border-box;
 
 body{
 overflow:hidden;
-background:#111;
 font-family:Arial,sans-serif;
+background:#111;
 touch-action:none;
 }
 
@@ -29,77 +28,73 @@ position:relative;
 width:100vw;
 height:100vh;
 overflow:hidden;
-background:#444;
+background:#4caf50;
 }
 
 /* JALAN */
 #road{
 position:absolute;
-width:100%;
+left:50%;
+transform:translateX(-50%);
+width:90%;
 height:100%;
-background:#2c2c2c;
+background:#2f2f2f;
 overflow:hidden;
+border-left:8px solid white;
+border-right:8px solid white;
 }
 
-/* GARIS JALAN */
+/* GARIS */
 .line{
 position:absolute;
-width:10px;
-height:80px;
+width:12px;
+height:90px;
 background:white;
 left:50%;
 transform:translateX(-50%);
-opacity:0.8;
+opacity:0.7;
 }
 
-/* MOBIL PLAYER */
-#player{
+/* MOBIL */
+.car{
 position:absolute;
-width:80px;
-height:140px;
-background:linear-gradient(180deg,#ff0000,#b30000);
-bottom:30px;
+width:70px;
+height:120px;
+border-radius:15px;
+}
+
+/* PLAYER */
+#player{
+background:linear-gradient(#ff0000,#a00000);
+bottom:20px;
 left:50%;
 transform:translateX(-50%);
-border-radius:15px;
-box-shadow:
-0 0 20px rgba(255,0,0,0.8),
-0 0 40px rgba(255,0,0,0.4);
+box-shadow:0 0 20px rgba(255,0,0,0.8);
 }
 
-/* KACA MOBIL */
-#player::before{
+/* LAWAN */
+.enemy1{
+background:linear-gradient(#00e5ff,#006064);
+}
+
+.enemy2{
+background:linear-gradient(#ffd600,#ff6f00);
+}
+
+.enemy3{
+background:linear-gradient(#76ff03,#33691e);
+}
+
+/* KACA */
+.car::before{
 content:"";
 position:absolute;
-width:55px;
-height:35px;
-background:#87ceeb;
-top:15px;
+width:45px;
+height:28px;
+background:#9be7ff;
+top:12px;
 left:12px;
-border-radius:10px;
-}
-
-/* MOBIL MUSUH */
-.enemy{
-position:absolute;
-width:80px;
-height:140px;
-background:linear-gradient(180deg,#ffd600,#ff9800);
-border-radius:15px;
-top:-200px;
-box-shadow:
-0 0 20px rgba(255,193,7,0.7);
-}
-
-.enemy::before{
-content:"";
-position:absolute;
-width:55px;
-height:35px;
-background:#87ceeb;
-top:15px;
-left:12px;
-border-radius:10px;
+border-radius:8px;
 }
 
 /* HUD */
@@ -108,40 +103,57 @@ position:absolute;
 top:15px;
 left:15px;
 z-index:20;
-color:white;
-font-size:22px;
-font-weight:bold;
 background:rgba(0,0,0,0.5);
 padding:15px 20px;
 border-radius:15px;
-backdrop-filter:blur(5px);
+color:white;
+font-size:22px;
+font-weight:bold;
 line-height:1.6;
 }
 
-/* GAME OVER */
-#gameOver{
+/* FINISH */
+#finish{
+position:absolute;
+top:-200px;
+left:0;
+width:100%;
+height:120px;
+background:
+repeating-linear-gradient(
+90deg,
+white 0px,
+white 40px,
+black 40px,
+black 80px
+);
+z-index:5;
+}
+
+/* HASIL */
+#result{
 position:absolute;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
 background:rgba(0,0,0,0.9);
-padding:40px;
+padding:35px;
 border-radius:20px;
-text-align:center;
 color:white;
+text-align:center;
 display:none;
 z-index:50;
 width:90%;
 max-width:400px;
 }
 
-#gameOver h1{
-font-size:45px;
-margin-bottom:15px;
-color:#ffd700;
+#result h1{
+font-size:42px;
+margin-bottom:20px;
+color:#ffd600;
 }
 
-#finalScore{
+#resultText{
 font-size:28px;
 margin-bottom:20px;
 line-height:1.5;
@@ -151,51 +163,55 @@ line-height:1.5;
 padding:15px 30px;
 font-size:24px;
 border:none;
-border-radius:15px;
+border-radius:12px;
 background:#00c853;
 color:white;
-cursor:pointer;
 font-weight:bold;
+cursor:pointer;
 }
 
-/* KONTROL HP */
+/* KONTROL */
 #controls{
 position:absolute;
 bottom:20px;
 width:100%;
 display:flex;
 justify-content:space-between;
-padding:0 30px;
+padding:0 25px;
 z-index:30;
 }
 
 .controlBtn{
-width:110px;
-height:110px;
+width:100px;
+height:100px;
 border-radius:50%;
-background:rgba(255,255,255,0.2);
+background:rgba(255,255,255,0.25);
 display:flex;
 justify-content:center;
 align-items:center;
-font-size:50px;
+font-size:45px;
 color:white;
-user-select:none;
 backdrop-filter:blur(5px);
-position:relative;
-bottom:10px;
+user-select:none;
 }
 
 .controlBtn:active{
-background:rgba(255,255,255,0.4);
 transform:scale(0.95);
+background:rgba(255,255,255,0.45);
 }
 
 /* HP */
 @media(max-width:768px){
 
-#player,.enemy{
-width:70px;
-height:120px;
+.car{
+width:60px;
+height:100px;
+}
+
+.controlBtn{
+width:85px;
+height:85px;
+font-size:38px;
 }
 
 #hud{
@@ -203,17 +219,11 @@ font-size:18px;
 padding:12px 15px;
 }
 
-.controlBtn{
-width:90px;
-height:90px;
-font-size:40px;
+#result h1{
+font-size:32px;
 }
 
-#gameOver h1{
-font-size:35px;
-}
-
-#finalScore{
+#resultText{
 font-size:22px;
 }
 
@@ -222,9 +232,9 @@ font-size:22px;
 /* TV */
 @media(min-width:1200px){
 
-#player,.enemy{
-width:100px;
-height:170px;
+.car{
+width:90px;
+height:150px;
 }
 
 .controlBtn{
@@ -241,23 +251,32 @@ font-size:60px;
 
 <div id="game">
 
-<div id="road"></div>
+<div id="road">
+
+<div id="finish"></div>
+
+</div>
 
 <!-- HUD -->
 <div id="hud">
-<div>🏁 Score: <span id="score">0</span></div>
-<div id="levelText">🚀 Level: 1</div>
+<div>🏁 Posisi: <span id="position">4</span>/4</div>
+<div>🚀 Kecepatan: <span id="speed">0</span></div>
 </div>
 
 <!-- PLAYER -->
-<div id="player"></div>
+<div id="player" class="car"></div>
 
-<!-- GAME OVER -->
-<div id="gameOver">
+<!-- LAWAN -->
+<div id="enemy1" class="car enemy1"></div>
+<div id="enemy2" class="car enemy2"></div>
+<div id="enemy3" class="car enemy3"></div>
 
-<h1>GAME OVER</h1>
+<!-- HASIL -->
+<div id="result">
 
-<div id="finalScore"></div>
+<h1>FINISH</h1>
+
+<div id="resultText"></div>
 
 <button id="restartBtn">
 MAIN LAGI
@@ -286,63 +305,59 @@ MAIN LAGI
    ELEMENT
 ========================= */
 
-const game = document.getElementById("game");
 const player = document.getElementById("player");
-const scoreText = document.getElementById("score");
-const levelText = document.getElementById("levelText");
-const gameOver = document.getElementById("gameOver");
-const finalScore = document.getElementById("finalScore");
-const restartBtn = document.getElementById("restartBtn");
+const enemy1 = document.getElementById("enemy1");
+const enemy2 = document.getElementById("enemy2");
+const enemy3 = document.getElementById("enemy3");
+
+const positionText =
+document.getElementById("position");
+
+const speedText =
+document.getElementById("speed");
+
+const finish =
+document.getElementById("finish");
+
+const result =
+document.getElementById("result");
+
+const resultText =
+document.getElementById("resultText");
 
 /* =========================
-   VARIABLE
+   POSISI AWAL
 ========================= */
 
-let playerX = window.innerWidth / 2 - 40;
-
-let score = 0;
-
-let level = 1;
-
-let speed = 5;
-
-let playing = true;
-
-/* =========================
-   POSISI PLAYER
-========================= */
+let playerX = window.innerWidth / 2 - 35;
 
 player.style.left = playerX + "px";
 
+enemy1.style.left = "20%";
+enemy2.style.left = "45%";
+enemy3.style.left = "70%";
+
+enemy1.style.top = "200px";
+enemy2.style.top = "350px";
+enemy3.style.top = "500px";
+
 /* =========================
-   LEVEL
+   DATA BALAP
 ========================= */
 
-function updateLevel(){
+let roadY = 0;
 
-if(score >= 20){
+let playerDistance = 0;
 
-level = 3;
-speed = 14;
+let enemy1Distance = 0;
+let enemy2Distance = 0;
+let enemy3Distance = 0;
 
-}
-else if(score >= 10){
+let playerSpeed = 8;
 
-level = 2;
-speed = 9;
+let playing = true;
 
-}
-else{
-
-level = 1;
-speed = 5;
-
-}
-
-levelText.innerHTML =
-"🚀 Level: " + level;
-
-}
+const FINISH_DISTANCE = 5000;
 
 /* =========================
    GARIS JALAN
@@ -354,25 +369,27 @@ let line = document.createElement("div");
 
 line.classList.add("line");
 
-line.style.top = (i * 100) + "px";
+line.style.top = (i * 120) + "px";
 
-document.getElementById("road").appendChild(line);
+document.getElementById("road")
+.appendChild(line);
 
 }
 
 function moveRoad(){
 
-const lines = document.querySelectorAll(".line");
+const lines =
+document.querySelectorAll(".line");
 
 lines.forEach(line=>{
 
 let top = parseInt(line.style.top);
 
-top += speed;
+top += playerSpeed;
 
 if(top > window.innerHeight){
 
-top = -100;
+top = -120;
 
 }
 
@@ -383,106 +400,118 @@ line.style.top = top + "px";
 }
 
 /* =========================
-   MOBIL MUSUH
+   GERAK LAWAN
 ========================= */
-
-const enemies = [];
-
-for(let i=0;i<3;i++){
-
-createEnemy(i);
-
-}
-
-function createEnemy(index){
-
-let enemy = document.createElement("div");
-
-enemy.classList.add("enemy");
-
-enemy.style.left =
-(Math.random() * (window.innerWidth - 100)) + "px";
-
-enemy.style.top = (-350 * index) + "px";
-
-game.appendChild(enemy);
-
-enemies.push(enemy);
-
-}
 
 function moveEnemies(){
 
-enemies.forEach(enemy=>{
+enemy1Distance +=
+Math.random() * 10;
 
-let top = parseInt(enemy.style.top);
+enemy2Distance +=
+Math.random() * 9;
 
-top += speed + 3;
-
-if(top > window.innerHeight){
-
-top = -250;
-
-enemy.style.left =
-(Math.random() * (window.innerWidth - 100)) + "px";
-
-score++;
-
-scoreText.textContent = score;
-
-updateLevel();
-
-}
-
-enemy.style.top = top + "px";
-
-checkCollision(enemy);
-
-});
+enemy3Distance +=
+Math.random() * 11;
 
 }
 
 /* =========================
-   TABRAKAN
+   UPDATE PLAYER
 ========================= */
 
-function checkCollision(enemy){
+function updatePlayer(){
 
-const playerRect =
-player.getBoundingClientRect();
+playerDistance += playerSpeed;
 
-const enemyRect =
-enemy.getBoundingClientRect();
+speedText.innerHTML =
+playerSpeed;
+
+}
+
+/* =========================
+   POSISI BALAP
+========================= */
+
+function updatePosition(){
+
+const racers = [
+
+playerDistance,
+enemy1Distance,
+enemy2Distance,
+enemy3Distance
+
+];
+
+const sorted =
+[...racers].sort((a,b)=>b-a);
+
+const position =
+sorted.indexOf(playerDistance)+1;
+
+positionText.innerHTML =
+position;
+
+}
+
+/* =========================
+   FINISH
+========================= */
+
+function checkFinish(){
 
 if(
-playerRect.left < enemyRect.right &&
-playerRect.right > enemyRect.left &&
-playerRect.top < enemyRect.bottom &&
-playerRect.bottom > enemyRect.top
+playerDistance >= FINISH_DISTANCE ||
+enemy1Distance >= FINISH_DISTANCE ||
+enemy2Distance >= FINISH_DISTANCE ||
+enemy3Distance >= FINISH_DISTANCE
 ){
-
-endGame();
-
-}
-
-}
-
-/* =========================
-   GAME OVER
-========================= */
-
-function endGame(){
 
 playing = false;
 
-gameOver.style.display = "block";
+result.style.display = "block";
 
-finalScore.innerHTML = `
-🏁 Score: ${score}<br>
-🚀 Level Tertinggi: ${level}
+const racers = [
+
+{
+name:"Kamu",
+distance:playerDistance
+},
+
+{
+name:"Mobil Biru",
+distance:enemy1Distance
+},
+
+{
+name:"Mobil Kuning",
+distance:enemy2Distance
+},
+
+{
+name:"Mobil Hijau",
+distance:enemy3Distance
+}
+
+];
+
+racers.sort((a,b)=>
+b.distance-a.distance
+);
+
+const posisi =
+racers.findIndex(
+r=>r.name==="Kamu"
+)+1;
+
+resultText.innerHTML = `
+🏆 Posisi Akhir: ${posisi}/4
 `;
 
 navigator.vibrate?.([200,100,200]);
+
+}
 
 }
 
@@ -498,6 +527,12 @@ moveRoad();
 
 moveEnemies();
 
+updatePlayer();
+
+updatePosition();
+
+checkFinish();
+
 requestAnimationFrame(update);
 
 }
@@ -510,36 +545,40 @@ update();
 
 function moveLeft(){
 
-playerX -= 12;
+playerX -= 15;
 
-if(playerX < 0){
+if(playerX < 20){
 
-playerX = 0;
+playerX = 20;
 
 }
 
-player.style.left = playerX + "px";
+player.style.left =
+playerX + "px";
 
 }
 
 function moveRight(){
 
-playerX += 12;
+playerX += 15;
 
-if(playerX >
-window.innerWidth - player.offsetWidth){
+if(
+playerX >
+window.innerWidth - 100
+){
 
 playerX =
-window.innerWidth - player.offsetWidth;
+window.innerWidth - 100;
 
 }
 
-player.style.left = playerX + "px";
+player.style.left =
+playerX + "px";
 
 }
 
 /* =========================
-   KONTROL HP SMOOTH
+   KONTROL HP
 ========================= */
 
 let moveInterval;
@@ -550,7 +589,7 @@ clearInterval(moveInterval);
 
 moveInterval = setInterval(()=>{
 
-if(direction === "left"){
+if(direction==="left"){
 
 moveLeft();
 
@@ -616,13 +655,13 @@ document.addEventListener(
 "keydown",
 (e)=>{
 
-if(e.key === "ArrowLeft"){
+if(e.key==="ArrowLeft"){
 
 moveLeft();
 
 }
 
-if(e.key === "ArrowRight"){
+if(e.key==="ArrowRight"){
 
 moveRight();
 
@@ -635,7 +674,8 @@ moveRight();
    RESTART
 ========================= */
 
-restartBtn.addEventListener(
+document.getElementById("restartBtn")
+.addEventListener(
 "click",
 ()=>{
 
