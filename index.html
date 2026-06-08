@@ -1,828 +1,731 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<title>Game Balap Mobil</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Tak Tik Arena</title>
 
 <style>
 
 *{
-margin:0;
-padding:0;
 box-sizing:border-box;
--webkit-tap-highlight-color:transparent;
+font-family:Arial;
 }
+
 
 body{
-overflow:hidden;
-font-family:Arial,sans-serif;
-background:#111;
-touch-action:none;
-}
 
-#game{
-position:relative;
-width:100vw;
+margin:0;
 height:100vh;
-overflow:hidden;
-background:#4caf50;
-}
 
-#road{
-position:absolute;
-left:50%;
-transform:translateX(-50%);
-width:90%;
-height:100%;
-background:#2c2c2c;
-border-left:8px solid white;
-border-right:8px solid white;
-overflow:hidden;
-}
-
-/* GARIS */
-.line{
-position:absolute;
-width:12px;
-height:90px;
-background:white;
-left:50%;
-transform:translateX(-50%);
-opacity:0.7;
-}
-
-/* MOBIL */
-.car{
-position:absolute;
-width:70px;
-height:120px;
-border-radius:15px;
-}
-
-.car::before{
-content:"";
-position:absolute;
-width:45px;
-height:28px;
-background:#9be7ff;
-top:12px;
-left:12px;
-border-radius:8px;
-}
-
-/* PLAYER */
-#player{
-background:linear-gradient(#ff0000,#990000);
-bottom:30px;
-left:50%;
-transform:translateX(-50%);
-box-shadow:0 0 20px rgba(255,0,0,0.8);
-}
-
-/* LAWAN */
-.enemy1{
-background:linear-gradient(#00e5ff,#006064);
-}
-
-.enemy2{
-background:linear-gradient(#ffd600,#ff6f00);
-}
-
-.enemy3{
-background:linear-gradient(#76ff03,#33691e);
-}
-
-/* HUD */
-#hud{
-position:absolute;
-top:15px;
-left:15px;
-z-index:20;
-background:rgba(0,0,0,0.5);
-padding:15px 20px;
-border-radius:15px;
-color:white;
-font-size:22px;
-font-weight:bold;
-line-height:1.6;
-}
-
-/* RESULT */
-#result{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-background:rgba(0,0,0,0.9);
-padding:35px;
-border-radius:20px;
-text-align:center;
-color:white;
-display:none;
-z-index:50;
-width:90%;
-max-width:400px;
-}
-
-#result h1{
-font-size:42px;
-margin-bottom:20px;
-color:#ffd600;
-}
-
-#resultText{
-font-size:28px;
-margin-bottom:20px;
-}
-
-#restartBtn{
-padding:15px 30px;
-font-size:24px;
-border:none;
-border-radius:12px;
-background:#00c853;
-color:white;
-font-weight:bold;
-cursor:pointer;
-}
-
-/* KONTROL */
-#controls{
-position:absolute;
-bottom:20px;
-width:100%;
 display:flex;
-justify-content:center;
 align-items:center;
-gap:15px;
-z-index:30;
-flex-wrap:wrap;
+justify-content:center;
+
+background:
+linear-gradient(135deg,#000428,#004e92);
+
+color:white;
+
 }
 
-.controlBtn{
+
+.game{
+
+width:390px;
+padding:20px;
+
+background:#ffffff22;
+
+border-radius:30px;
+
+text-align:center;
+
+backdrop-filter:blur(15px);
+
+}
+
+
+h1{
+margin:5px;
+}
+
+
+input,select,button{
+
+padding:12px;
+
+border:0;
+
+border-radius:25px;
+
+margin:4px;
+
+}
+
+
+button{
+
+background:#00ff99;
+
+}
+
+
+
+.stats{
+
+display:flex;
+justify-content:space-around;
+
+background:#0005;
+
+border-radius:20px;
+
+margin-top:10px;
+
+}
+
+
+
+.board{
+
+display:grid;
+
+grid-template-columns:repeat(3,90px);
+
+gap:10px;
+
+justify-content:center;
+
+margin:20px;
+
+}
+
+
+
+.cell{
+
 width:90px;
 height:90px;
+
+background:#ffffff33;
+
 border-radius:20px;
-background:rgba(255,255,255,0.2);
+
+font-size:55px;
+
 display:flex;
-justify-content:center;
 align-items:center;
-font-size:42px;
-color:white;
-backdrop-filter:blur(5px);
-user-select:none;
-}
+justify-content:center;
 
-.controlBtn:active{
-transform:scale(0.95);
-background:rgba(255,255,255,0.45);
-}
+cursor:pointer;
 
-#middleControls{
-display:flex;
-gap:15px;
-}
-
-@media(max-width:768px){
-
-.car{
-width:60px;
-height:100px;
-}
-
-.controlBtn{
-width:75px;
-height:75px;
-font-size:35px;
-}
-
-#hud{
-font-size:18px;
-padding:12px 15px;
-}
+transition:.2s;
 
 }
+
+
+
+.cell:hover{
+
+transform:scale(1.1);
+
+}
+
+
+
+.win{
+
+animation:boom .5s infinite alternate;
+
+}
+
+
+
+@keyframes boom{
+
+to{
+transform:scale(1.3);
+}
+
+}
+
+
+
+.rank{
+
+background:#0005;
+
+border-radius:15px;
+
+padding:10px;
+
+}
+
 
 </style>
+
 </head>
+
+
 <body>
 
-<div id="game">
 
-<div id="road"></div>
 
-<!-- HUD -->
-<div id="hud">
+<div class="game">
 
-<div>
-🏁 Posisi:
-<span id="position">4</span>/4
-</div>
 
-<div>
-🚀 Kecepatan:
-<span id="speed">0</span>
-</div>
+<h1>🎮 TAK TIK ARENA</h1>
 
-</div>
 
-<!-- PLAYER -->
-<div id="player" class="car"></div>
+<input id="nama"
+placeholder="Nama">
 
-<!-- LAWAN -->
-<div id="enemy1" class="car enemy1"></div>
-<div id="enemy2" class="car enemy2"></div>
-<div id="enemy3" class="car enemy3"></div>
 
-<!-- RESULT -->
-<div id="result">
+<select id="avatar">
 
-<h1>FINISH</h1>
+<option>😀</option>
+<option>😎</option>
+<option>🐯</option>
+<option>👑</option>
+<option>🤖</option>
 
-<div id="resultText"></div>
+</select>
 
-<button id="restartBtn">
-MAIN LAGI
+
+<br>
+
+
+<select id="level">
+
+<option value="1">
+Level Mudah
+</option>
+
+<option value="2">
+Level Sedang
+</option>
+
+<option value="3">
+Level Sulit
+</option>
+
+</select>
+
+
+<button onclick="start()">
+Mulai
 </button>
 
+
+
+<div class="stats">
+
+
+<div>
+⭐ Level
+<h3 id="lvl">1</h3>
 </div>
 
-<!-- KONTROL -->
-<div id="controls">
 
-<div class="controlBtn" id="upBtn">
-⬆
+<div>
+🪙 Koin
+<h3 id="coin">100</h3>
 </div>
 
-<div id="middleControls">
 
-<div class="controlBtn" id="leftBtn">
-⬅
+<div>
+🏆 Menang
+<h3 id="win">0</h3>
 </div>
 
-<div class="controlBtn" id="rightBtn">
-➡
-</div>
 
 </div>
 
-<div class="controlBtn" id="downBtn">
-⬇
-</div>
+
+
+<div id="board"
+class="board"></div>
+
+
+<h3 id="info">
+Tekan mulai
+</h3>
+
+
+
+<div class="rank">
+
+🏆 Ranking
+
+<div id="rank"></div>
 
 </div>
 
+
+<button onclick="fullscreen()">
+📱 Fullscreen
+</button>
+
+
+
 </div>
+
+
+
+
 
 <script>
 
-/* =========================
-   ELEMENT
-========================= */
 
-const player =
-document.getElementById("player");
+let papan;
 
-const enemy1 =
-document.getElementById("enemy1");
+let jalan=false;
 
-const enemy2 =
-document.getElementById("enemy2");
+let pemain="X";
 
-const enemy3 =
-document.getElementById("enemy3");
 
-const positionText =
-document.getElementById("position");
+let data={
 
-const speedText =
-document.getElementById("speed");
+level:1,
 
-const result =
-document.getElementById("result");
+coin:100,
 
-const resultText =
-document.getElementById("resultText");
+win:0
 
-/* =========================
-   PLAYER
-========================= */
+};
 
-let playerX =
-window.innerWidth / 2 - 35;
 
-player.style.left =
-playerX + "px";
 
-/* =========================
-   POSISI LAWAN
-========================= */
+let ranking=
+JSON.parse(localStorage.rank||"[]");
 
-enemy1.style.left = "20%";
-enemy2.style.left = "45%";
-enemy3.style.left = "70%";
 
-let enemy1Y = 0;
-let enemy2Y = -200;
-let enemy3Y = -400;
 
-/* =========================
-   GAME DATA
-========================= */
+const sound=
+new Audio(
+"https://actions.google.com/sounds/v1/cartoon/pop.ogg"
+);
 
-let speed = 0;
 
-let maxSpeed = 25;
 
-let playing = true;
 
-let playerDistance = 0;
 
-let enemy1Distance = 0;
-let enemy2Distance = 0;
-let enemy3Distance = 0;
+function start(){
 
-const FINISH_DISTANCE = 7000;
 
-/* =========================
-   GARIS JALAN
-========================= */
+papan=[
 
-for(let i=0;i<15;i++){
+"","","",
+"","","",
+"","",""
 
-let line =
-document.createElement("div");
+];
 
-line.classList.add("line");
 
-line.style.top =
-(i * 120) + "px";
+jalan=true;
 
-document.getElementById("road")
-.appendChild(line);
+
+gambar();
+
+
+
+info.innerHTML=
+nama.value+
+" bermain";
+
+
 
 }
 
-function moveRoad(){
 
-const lines =
-document.querySelectorAll(".line");
 
-lines.forEach(line=>{
 
-let top =
-parseInt(line.style.top);
 
-top += speed;
+function gambar(){
 
-if(top > window.innerHeight){
 
-top = -120;
+board.innerHTML="";
+
+
+
+papan.forEach((v,i)=>{
+
+
+let b=document.createElement("div");
+
+
+b.className="cell";
+
+
+b.innerHTML=
+v=="X"
+?
+avatar.value
+:
+v;
+
+
+b.onclick=()=>main(i);
+
+
+
+board.appendChild(b);
+
+
+
+});
+
+
 
 }
 
-line.style.top =
-top + "px";
+
+
+
+function main(i){
+
+
+if(!jalan)return;
+
+
+if(papan[i]!="")
+return;
+
+
+
+papan[i]="X";
+
+
+sound.play();
+
+
+
+gambar();
+
+
+
+if(check("X")){
+
+menang("KAMU MENANG 🎉");
+
+return;
+
+}
+
+
+
+if(!papan.includes("")){
+
+info.innerHTML="Seri 🤝";
+
+return;
+
+}
+
+
+
+setTimeout(ai,400);
+
+
+
+}
+
+
+
+
+
+function ai(){
+
+
+let lv=
+document.getElementById("level").value;
+
+
+let move;
+
+
+if(lv==1)
+
+move=random();
+
+
+else
+
+move=minimax(papan,"O").index;
+
+
+
+papan[move]="O";
+
+
+
+gambar();
+
+
+
+if(check("O")){
+
+menang("AI MENANG 🤖");
+
+return;
+
+}
+
+
+
+}
+
+
+
+
+
+function minimax(b,p){
+
+
+let kosong=[];
+
+
+b.forEach((x,i)=>{
+
+if(x=="")
+kosong.push(i);
+
+});
+
+
+
+if(winState(b,"O"))
+return {score:10};
+
+
+if(winState(b,"X"))
+return {score:-10};
+
+
+
+if(kosong.length==0)
+return {score:0};
+
+
+
+let moves=[];
+
+
+
+for(let i of kosong){
+
+
+let c=[...b];
+
+
+c[i]=p;
+
+
+
+let r=
+p=="O"
+?
+minimax(c,"X")
+:
+minimax(c,"O");
+
+
+
+moves.push({
+
+index:i,
+
+score:r.score
 
 });
 
 }
 
-/* =========================
-   GERAK LAWAN
-========================= */
 
-function moveEnemies(){
 
-let e1Speed =
-8 + Math.random()*3;
+return p=="O"
 
-let e2Speed =
-9 + Math.random()*3;
+?
 
-let e3Speed =
-7 + Math.random()*4;
+moves.reduce((a,b)=>
+a.score>b.score?a:b)
 
-/* Mobil bergerak sendiri */
+:
 
-enemy1Y += e1Speed;
-enemy2Y += e2Speed;
-enemy3Y += e3Speed;
+moves.reduce((a,b)=>
+a.score<b.score?a:b);
 
-enemy1Distance += e1Speed;
-enemy2Distance += e2Speed;
-enemy3Distance += e3Speed;
-
-/* Loop */
-
-if(enemy1Y > window.innerHeight){
-
-enemy1Y = -200;
 
 }
 
-if(enemy2Y > window.innerHeight){
 
-enemy2Y = -300;
 
-}
 
-if(enemy3Y > window.innerHeight){
 
-enemy3Y = -400;
+function random(){
 
-}
 
-enemy1.style.top =
-enemy1Y + "px";
+let a=[];
 
-enemy2.style.top =
-enemy2Y + "px";
 
-enemy3.style.top =
-enemy3Y + "px";
+papan.forEach((x,i)=>{
 
-}
-
-/* =========================
-   PLAYER
-========================= */
-
-function updatePlayer(){
-
-playerDistance += speed;
-
-speedText.innerHTML =
-Math.floor(speed);
-
-}
-
-/* =========================
-   POSISI
-========================= */
-
-function updatePosition(){
-
-const racers = [
-
-playerDistance,
-enemy1Distance,
-enemy2Distance,
-enemy3Distance
-
-];
-
-const sorted =
-[...racers].sort((a,b)=>b-a);
-
-const position =
-sorted.indexOf(playerDistance)+1;
-
-positionText.innerHTML =
-position;
-
-}
-
-/* =========================
-   FINISH
-========================= */
-
-function checkFinish(){
-
-if(
-playerDistance >= FINISH_DISTANCE ||
-enemy1Distance >= FINISH_DISTANCE ||
-enemy2Distance >= FINISH_DISTANCE ||
-enemy3Distance >= FINISH_DISTANCE
-){
-
-playing = false;
-
-result.style.display = "block";
-
-const racers = [
-
-{
-name:"Kamu",
-distance:playerDistance
-},
-
-{
-name:"Mobil Biru",
-distance:enemy1Distance
-},
-
-{
-name:"Mobil Kuning",
-distance:enemy2Distance
-},
-
-{
-name:"Mobil Hijau",
-distance:enemy3Distance
-}
-
-];
-
-racers.sort((a,b)=>
-b.distance-a.distance
-);
-
-const posisi =
-racers.findIndex(
-r=>r.name==="Kamu"
-)+1;
-
-resultText.innerHTML = `
-🏆 Posisi Akhir:
-${posisi}/4
-`;
-
-navigator.vibrate?.(
-[200,100,200]
-);
-
-}
-
-}
-
-/* =========================
-   UPDATE GAME
-========================= */
-
-function update(){
-
-if(!playing) return;
-
-moveRoad();
-
-moveEnemies();
-
-updatePlayer();
-
-updatePosition();
-
-checkFinish();
-
-requestAnimationFrame(update);
-
-}
-
-update();
-
-/* =========================
-   GERAK MOBIL
-========================= */
-
-function moveLeft(){
-
-playerX -= 12;
-
-if(playerX < 20){
-
-playerX = 20;
-
-}
-
-player.style.left =
-playerX + "px";
-
-}
-
-function moveRight(){
-
-playerX += 12;
-
-if(
-playerX >
-window.innerWidth - 100
-){
-
-playerX =
-window.innerWidth - 100;
-
-}
-
-player.style.left =
-playerX + "px";
-
-}
-
-/* =========================
-   GAS & REM
-========================= */
-
-function accelerate(){
-
-speed += 0.5;
-
-if(speed > maxSpeed){
-
-speed = maxSpeed;
-
-}
-
-}
-
-function brake(){
-
-speed -= 0.7;
-
-if(speed < 0){
-
-speed = 0;
-
-}
-
-}
-
-/* =========================
-   KONTROL HP
-========================= */
-
-let moveInterval;
-
-function holdAction(action){
-
-clearInterval(moveInterval);
-
-moveInterval = setInterval(()=>{
-
-if(action==="left"){
-
-moveLeft();
-
-}
-
-if(action==="right"){
-
-moveRight();
-
-}
-
-if(action==="up"){
-
-accelerate();
-
-}
-
-if(action==="down"){
-
-brake();
-
-}
-
-},16);
-
-}
-
-function stopAction(){
-
-clearInterval(moveInterval);
-
-}
-
-const leftBtn =
-document.getElementById("leftBtn");
-
-const rightBtn =
-document.getElementById("rightBtn");
-
-const upBtn =
-document.getElementById("upBtn");
-
-const downBtn =
-document.getElementById("downBtn");
-
-leftBtn.addEventListener(
-"touchstart",
-(e)=>{
-
-e.preventDefault();
-
-holdAction("left");
-
-}
-);
-
-rightBtn.addEventListener(
-"touchstart",
-(e)=>{
-
-e.preventDefault();
-
-holdAction("right");
-
-}
-);
-
-upBtn.addEventListener(
-"touchstart",
-(e)=>{
-
-e.preventDefault();
-
-holdAction("up");
-
-}
-);
-
-downBtn.addEventListener(
-"touchstart",
-(e)=>{
-
-e.preventDefault();
-
-holdAction("down");
-
-}
-);
-
-document.querySelectorAll(".controlBtn")
-.forEach(btn=>{
-
-btn.addEventListener(
-"touchend",
-stopAction
-);
+if(!x)a.push(i);
 
 });
 
-/* =========================
-   KEYBOARD
-========================= */
 
-document.addEventListener(
-"keydown",
-(e)=>{
-
-if(e.key==="ArrowLeft"){
-
-moveLeft();
+return a[
+Math.floor(Math.random()*a.length)
+];
 
 }
 
-if(e.key==="ArrowRight"){
 
-moveRight();
 
-}
 
-if(e.key==="ArrowUp"){
 
-accelerate();
+function check(p){
+
+return winState(papan,p);
 
 }
 
-if(e.key==="ArrowDown"){
 
-brake();
 
-}
+function winState(b,p){
 
-}
+
+let pola=[
+
+[0,1,2],
+[3,4,5],
+[6,7,8],
+
+[0,3,6],
+[1,4,7],
+[2,5,8],
+
+[0,4,8],
+[2,4,6]
+
+];
+
+
+return pola.some(x=>
+
+x.every(i=>b[i]==p)
+
 );
 
-/* =========================
-   RESTART
-========================= */
-
-document.getElementById("restartBtn")
-.addEventListener(
-"click",
-()=>{
-
-location.reload();
-
-}
-);
-
-/* =========================
-   FULLSCREEN
-========================= */
-
-document.body.addEventListener(
-"click",
-()=>{
-
-const el =
-document.documentElement;
-
-if(el.requestFullscreen){
-
-el.requestFullscreen()
-.catch(()=>{});
 
 }
 
-},
-{once:true}
-);
+
+
+
+
+function menang(t){
+
+
+jalan=false;
+
+
+info.innerHTML=
+"<span class='win'>"+t+"</span>";
+
+
+
+if(t.includes("KAMU")){
+
+
+data.win++;
+
+data.coin+=50;
+
+
+ranking.push({
+
+nama:nama.value,
+
+score:data.win
+
+});
+
+
+
+localStorage.rank=
+JSON.stringify(ranking);
+
+
+}
+
+
+
+lvl.innerHTML=data.level;
+
+coin.innerHTML=data.coin;
+
+win.innerHTML=data.win;
+
+
+
+tampilRank();
+
+}
+
+
+
+
+
+function tampilRank(){
+
+
+rank.innerHTML="";
+
+
+ranking
+.sort((a,b)=>b.score-a.score)
+.slice(0,5)
+.forEach((x,i)=>{
+
+
+rank.innerHTML+=
+
+(i+1)+". "+
+x.nama+
+" ⭐"+
+x.score+
+"<br>";
+
+
+});
+
+
+}
+
+
+
+
+function fullscreen(){
+
+
+document.documentElement.requestFullscreen();
+
+}
+
+
+
+
+tampilRank();
+
+
 
 </script>
+
 
 </body>
 </html>
